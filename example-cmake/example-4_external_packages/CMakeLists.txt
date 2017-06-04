@@ -1,0 +1,60 @@
+# recommend to add these two lines
+cmake_minimum_required(VERSION 3.8.1)
+project(external_libs)
+
+message("CMAKE_ROOT => " ${CMAKE_ROOT})
+message("CMAKE_MODULE_PATH => " ${CMAKE_MODULE_PATH})
+add_executable(externallib externallib.cpp)
+
+# way - use find package to get information of package
+if(0)
+	find_package(CURL REQUIRED)
+	if(CURL_FOUND)
+		include_directories(${CURL_INCLUDE_DIR})
+		target_link_libraries(externallib ${CURL_LIBRARY})
+		message("curl found => " ${CURL_FOUND})
+		message("curl header => " ${CURL_INCLUDE_DIR})
+		message("curl Library => " ${CURL_LIBRARY})
+		message("curl Libraries => " ${CURL_LIBRARIES})
+	else() # or else(CURL_FOUND)
+		message(FATAL_ERROR "curl not found!")
+	endif() # or endif(CURL_FOUND)
+endif()
+
+# way - use find libray to get library link
+if(1)
+	IF (APPLE)
+		#find_path(CURL_TEST_INCLUDE_DIR NAMES curl/curl.h)
+		# Additional search locations can be specified after the PATHS argument.
+		find_path(CURL_TEST_INCLUDE_DIR NAMES curl.h PATHS /usr/include/curl)
+		find_library(CURL_TEST_LIB curl)	
+		message("header -> ${CURL_TEST_INCLUDE_DIR}")
+		message("lib -> ${CURL_TEST_LIB}")
+		target_link_libraries(externallib ${CURL_LIB})
+	ENDIF (APPLE)
+endif()
+
+# way - use pkg-config
+if(0)
+	message("PKG_CONFIG_FOUND => " ${PKG_CONFIG_FOUND})
+	message("PKG_CONFIG_EXECUTABLE => " ${PKG_CONFIG_EXECUTABLE})
+	message("PKG_CONFIG_VERSION_STRING => " ${PKG_CONFIG_VERSION_STRING})
+	find_package(PKGCONFIG)
+	message("PKG_CONFIG_FOUND => " ${PKG_CONFIG_FOUND})
+	message("PKG_CONFIG_EXECUTABLE => " ${PKG_CONFIG_EXECUTABLE})
+	message("PKG_CONFIG_VERSION_STRING => " ${PKG_CONFIG_VERSION_STRING})
+	# use find_package(PKGCONFIG) before use pkg-config module
+	pkg_check_modules(LIBPCRE libpcre)
+	message("LIBPCRE found => " ${LIBPCRE_FOUND})
+	message("LIBPCRE Libraries => " ${LIBPCRE_LIBRARIES})
+	message("LIBPCRE Library dirs => " ${LIBPCRE_LIBRARY_DIR})
+	message("LIBPCRE LDFLAGS => " ${LIBPCRE_LDFLAGS})
+	message("LIBPCRE LIBPCRE_LDFLAGS_OTHER => " ${LIBPCRE_LDFLAGS_OTHER})
+	message("LIBPCRE LIBPCRE_INCLUDE_DIRS => " ${LIBPCRE_INCLUDE_DIRS})
+	message("LIBPCRE LIBPCRE_CFLAGS => " ${LIBPCRE_CFLAGS})
+	message("LIBPCRE LIBPCRE_CFLAGS_OTHER => " ${LIBPCRE_CFLAGS_OTHER})
+
+	pkg_check_modules (RUBY ruby-2.3)
+	pkg_search_module(RUBY ruby-2.3 ruby)
+	message("ruby => " ${RUBY_FOUND})
+endif()
