@@ -30,7 +30,7 @@ if(1)
 		find_library(CURL_TEST_LIB curl)	
 		message("header -> ${CURL_TEST_INCLUDE_DIR}")
 		message("lib -> ${CURL_TEST_LIB}")
-		target_link_libraries(externallib ${CURL_LIB})
+		target_link_libraries(externallib ${CURL_TEST_LIB})
 	ENDIF (APPLE)
 endif()
 
